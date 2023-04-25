@@ -4,9 +4,32 @@
         <meta charset = "utf-8">
         <title>Rock, Paper, Scissors, Shoot!</title>
         <link rel = "stylesheet" href = "./style.css">
+        <script src = "./script.js" defer></script>
     </head>
     <body>
-        <button id = "janken">janken time~</button> 
-        <script src = "./script.js"></script>
+        <div class = "janken_box">
+            <div class = "game_banner">
+                <button class = "janken">PLAY</button>
+            </div>
+            <div class = "game_bottom">
+                <div class = "game_console">
+                    <div class = "output"></div>
+                    <div class = "results">
+                        <div class = "player_score"></div>
+                        <div class = "bot_score"></div>
+                    </div>
+                </div>
+                <div class = "game_choices">
+                    <button class = "rock" value = 1></button>
+                    <button class = "paper" value = 2></button>
+                    <button class = "scissors" value = 3></button>
+                </div>
+            </div>
+        </div>
+
+        <audio src = "./audio/bg.mp3" id = "bg"></audio>
+        <audio src = "./audio/click.mp3" id = "button_click"></audio>
+        <audio src = "./audio/result.mp3" id = "result_screen"></audio>
+        <audio src = "./audio/lose.mp3" id = "lose"></audio>
     </body>
     </html>

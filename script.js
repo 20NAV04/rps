@@ -1,78 +1,127 @@
 let computerChoice;
+let x = false;
+
+var janken = document.querySelector(".janken");
+var jankenTime = document.createTextNode("IT'S JANKEN TIME");
+
+var gameBanner = document.querySelector(".game_banner");
+var rock = document.querySelector(".rock");
+var paper = document.querySelector(".paper");
+var scissors = document.querySelector(".scissors");
+var output = document.querySelector(".output");
+var results = document.querySelector(".results");
+var playerScore = document.querySelector(".player_score");
+var botScore = document.querySelector(".bot_score");
+var bg = document.querySelector("#bg");
+var buttonClick = document.querySelector("#button_click");
+var resultScreen = document.querySelector("#result_screen");
+var lose = document.querySelector("#lose");
 
 function getComputerChoice() {
     let x = Math.floor(Math.random() * 100) + 1;
-    if (x <= 33) computerChoice = "rock";
-    if (x > 33 && x <= 67) computerChoice = "scissors";
-    if (x > 67 && x <= 100) computerChoice = "paper";
+    if (x <= 33) computerChoice = 1;
+    if (x > 67 && x <= 100) computerChoice = 2;
+    if (x > 33 && x <= 67) computerChoice = 3;
     return computerChoice
+}
+
+function getPlayerChoice () {
+    let playerChoice;
+    return playerChoice;
 }
 
 function playRound (playerSelection, computerSelection) {
     computerSelection = getComputerChoice();
-    playerSelection = (prompt("Make your choice: rock, paper, or scissors!")).toLowerCase();
+    console.log(playerSelection);
     
-    if (playerSelection != "rock" && playerSelection != "paper" && playerSelection != "scissors") {
-        alert("Misinput! You made a typo!");
-        return 0;
-    }      
-    if (playerSelection == computerSelection) {
-        alert("Ditto! It's a draw!");
-        return 1;
-    }
-    if (playerSelection == "rock" && playerSelection > computerSelection) {
-        alert("Paper beats rock, you lose!");
-        return 2;
-    }
-    if (playerSelection == "rock" && playerSelection < computerSelection) {
-        alert("Rock beats scissors, you win!");
-        return 3;
-    }
-    if (computerSelection == "rock" && computerSelection > playerSelection) {
-        alert("Paper beats rock, you win!");
-        return 3;
-    }
-    if (playerSelection == "paper" && computerSelection == "scissors") {
-        alert("Scissors beat paper, you lose!");
-        return 2;
-    }
-    if (computerSelection == "rock" && computerSelection < playerSelection) {
-        alert("Rock beats scissors, you lose!");
-        return 2;
-    }   
-    if (playerSelection == "scissors"  && computerChoice == "paper") {
-        alert("Scissors beat paper, you win!");
-        return 3;
-    }
 }
 
-function game() {
-    let draw = 0
-    , win = 0
-    , lose = 0;
+function playRound(e) {
+    if (pScore == 5 || bScore == 5) return;
 
-    for (i = 0; i < 5; ++i) {
-        let result = playRound();
-        if (result == 0) i -= 1;
-        if (result == 1) {
-            console.log("draw");
-            ++draw;
-        }
-        if (result == 2) {
-            console.log("lose");
-            ++lose;
-        }
-        if (result == 3) {
-            console.log("win");
-            ++win;
-        }
-    }
+    let playerChoice = e.target.value;
+    let computerChoice = getComputerChoice();
+    if (!playerChoice) return; 
+    
+    console.log(playerChoice);
+    console.log(computerChoice);
+   
+    if (playerChoice == computerChoice) output.textContent = "IT'S A DRAW";
+    if (playerChoice == 1 && computerChoice == 2) {
+        output.textContent = "A POINT FOR ME";
+        ++bScore;
+        botScore.textContent = bScore;}
+    else if (playerChoice == 2 && computerChoice == 3) {
+        output.textContent = "A POINT FOR ME";
+        ++bScore;
+        botScore.textContent = bScore;}
+    else if (playerChoice == 3 && computerChoice == 1) {
+        output.textContent = "A POINT FOR ME";
+        ++bScore;
+        botScore.textContent = bScore;}
 
-    alert(`Game end! You had a total of ${draw} ${(draw > 1 || draw == 0) ? "draws" : "draw" }, ${win} ${(win > 1 || win == 0) ? "wins" : "win"}, and ${lose} ${(lose > 1 || lose == 0) ? "losses" : "loss"}`);
-
-    return [draw, win, lose];
+    else {
+        output.textContent = "LUCKY BASTARD";
+        ++pScore;
+        playerScore.textContent = pScore;}
+        
+    if (pScore == 5) {
+        output.textContent = "I'LL GET YOU NEXT TIME";
+        gameBanner.removeChild(jankenTime);
+        gameBanner.appendChild(janken);
+        janken.textContent = "PLAY AGAIN?";
+        bg.pause();
+        resultScreen.currentTime = 1;
+        resultScreen.loop = true;
+        resultScreen.play();
+        return;}
+    if (bScore == 5) {
+        output.textContent = "AS EXPECTED, LOSER";
+        gameBanner.removeChild(jankenTime);
+        gameBanner.appendChild(janken);
+        janken.textContent = "PLAY AGAIN?";
+        bg.pause();
+        lose.currentTime = 1;
+        lose.loop = true;
+        lose.play();
+        return;}
 }
 
-var janken = document.getElementById("janken");
-janken.addEventListener("click", game);
+function playState() {
+    bScore = 0;
+    pScore = 0;
+    playerScore.textContent = "0";
+    botScore.textContent = "0";
+    rock.textContent = "ROCK";
+    paper.textContent = "PAPER";
+    scissors.textContent = "SCISSORS";
+    gameBanner.removeChild(janken);
+    gameBanner.appendChild(jankenTime); 
+    output.textContent = "ROCK, PAPER OR SCISSORS?";
+    
+    window.addEventListener("click", playRound);
+    
+    rock.addEventListener("click", () => {
+        buttonClick.currentTime = 0;
+        buttonClick.play();
+    });
+    paper.addEventListener("click", () => {
+        buttonClick.currentTime = 0;
+        buttonClick.play();
+    });
+    scissors.addEventListener("click", () => {
+        buttonClick.currentTime = 0;
+        buttonClick.play();
+    });
+
+    resultScreen.pause();
+    lose.pause();
+    bg.currentTime = 0;
+    bg.loop = true;
+    bg.play();
+
+}
+
+janken.addEventListener("click", playState); 
+
 
